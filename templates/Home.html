@@ -1,0 +1,148 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <link href="{% static 'bootstrap-5.1.3-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js' %}"></script>
+    <title>Home</title>
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+        }
+
+        input[type=number] {
+            border: 2px solid #ccc;
+            padding: 10px;
+            border-radius: 15px;
+            -webkit-transition: 0.5s;
+            transition: 0.5s;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .form-select {
+            border: 2px solid #ccc;
+            padding: 10px;
+            border-radius: 15px;
+            -webkit-transition: 2s;
+        }
+    </style>
+</head>
+<body>
+<a class="btn btn-outline-success float-end me-4" target="_blank" href="/admin" role="button">Admin</a>
+<div class="container mt-2">
+    <img class="float-start" src="{% static 'media/Uni_Logo.png' %}" style="width: 100px; height:100px;"
+         alt="Uni_Logo">
+    <div class="row pt-4">
+        <span style="font-size:30px">The University Of Agriculture, Peshawar</span>
+        <p class="col-md-5 text-center">Online Fee Deposit Slip, System</p>
+    </div>
+    <form class="mt-2 row g-3 needs-validation" method="POST" novalidate>
+        {% csrf_token %}
+        <div class="col-md-6 position-relative">
+            <hr style="height:6px;color:#0c2cf5;">
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="mt-3 col-md-12 alert text-center alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+            <label for="validationTooltip04" class="form-label">Degree</label>
+            <select class="form-select" name="degree" id="validationTooltip04" required>
+                <option selected disabled value="">Degree...</option>
+                <option>Bechlor</option>
+            </select>
+            <div class="invalid-tooltip">
+                Please Select a Degree.
+            </div>
+        </div>
+        <div class="col-md-12"></div>
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip04" class="form-label">Program</label>
+            <select class="form-select" name="program" id="validationTooltip04" required>
+                <option selected disabled value="">Choose...</option>
+                {% for p in programs %}
+                    <option value="{{ p.Program_Name }}">{{ p.Program_Name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-tooltip">
+                Please Select Program.
+            </div>
+        </div>
+        <div class="col-md-12"></div>
+        <div class="col-md-3 position-relative">
+            <label for="validationTooltip04" class="form-label">Semester</label>
+            <select class="form-select" name="semester" id="validationTooltip04" required>
+                <option selected disabled value="">Choose...</option>
+                {% for p in semesters %}
+                    <option value="{{ p.Name }}">{{ p.Name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-tooltip">
+                Please Select Semester.
+            </div>
+        </div>
+        <div class="col-md-3 position-relative">
+            <label for="validationTooltip05" class="form-label">Roll No</label>
+            <input type="number" class="form-control" name="rollNo" id="validationTooltip05" required>
+            <div class="invalid-tooltip">
+                Please Provide A Valid Roll No.
+            </div>
+        </div>
+        <div class="col-11 pt-3 text-center">
+            <button class="btn btn-dark" type="submit"> Show Record</button>
+        </div>
+    </form>
+    {% if StdData %}
+        <table class="table table-bordered mt-3">
+            <tr class="text-center">
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Father Name</th>
+                <th>Program</th>
+                <th>Fee Amount</th>
+                <th>Print</th>
+            </tr>
+            {% for i in StdData %}
+                <tr class="text-center">
+                <td>{{ i.Roll_No }}</td>
+                <td>{{ i.Name }}</td>
+                <td>{{ i.Father_Name }}</td>
+                <td>{{ i.Program }}</td>
+                <td>{{ i.Semester.Fee }}</td>
+                <td><a class="btn btn-outline-success" target="_blank"
+                       href="{% url 'Slip' i.Program i.Semester i.Roll_No %}" role="button">Print</a>
+                </td>
+            {% endfor %}
+            </tr>
+        </table>
+    {% endif %}
+</div>
+</body>
+<footer>
+    <div class="position-absolute bottom-0 end-0 text-warning" style="background-color:black;">Developed & Designed By
+        Fawad Copyright@ 2022. All Rights Reserved.
+    </div>
+</footer>
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+</html>

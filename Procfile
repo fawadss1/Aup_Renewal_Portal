@@ -1,0 +1,1 @@
+web: gunicorn Aup_Renewal_Portal.wsgi
