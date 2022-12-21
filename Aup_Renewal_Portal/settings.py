@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://auprenewalportal.up.railway.app']
+
+
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
